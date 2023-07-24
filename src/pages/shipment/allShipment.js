@@ -107,6 +107,13 @@ export default function AllShipment() {
     });
   }, []);
 
+  const cellSender = useCallback(({ row }) => {
+    return truncate(row?.values?.['sender_address.name'], {
+      length: 20,
+      separator: /,? +/
+    });
+  }, []);
+
   //Action Cell
   const ActionCell = useCallback(
     ({ row }) => {
@@ -181,6 +188,13 @@ export default function AllShipment() {
         accessor: 'created_at',
         Cell: CustomerCellDate
       },
+
+      {
+        Header: 'Sender',
+        accessor: 'sender_address.name',
+        Cell: cellSender
+      },
+
       {
         Header: 'Receiver',
         accessor: 'receiver_address.name',
@@ -212,7 +226,7 @@ export default function AllShipment() {
         Cell: ActionCell
       }
     ],
-    [cellService, ActionCell, cellReceiver]
+    [cellService, ActionCell, cellReceiver, cellSender]
   );
 
   //   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
