@@ -108,7 +108,7 @@ export default function AllShipment() {
   }, []);
 
   const cellSender = useCallback(({ row }) => {
-    return truncate(row?.values?.['sender_address.name'], {
+    return truncate(row?.values?.['sender_address.company'], {
       length: 20,
       separator: /,? +/
     });
@@ -191,7 +191,7 @@ export default function AllShipment() {
 
       {
         Header: 'Sender',
-        accessor: 'sender_address.name',
+        accessor: 'sender_address.company',
         Cell: cellSender
       },
 
