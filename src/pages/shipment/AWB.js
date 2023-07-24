@@ -190,7 +190,7 @@ export default function ReactPDF(props) {
                 padding: '15px'
               }}
             >
-              <Text style={{ fontSize: '25px' }}>{props.shipment.sender_address ? props.shipment.sender_address.country : ''}</Text>
+              <Text style={{ fontSize: '25px' }}>{props.shipment.receiver_address ? props.shipment.receiver_address.country : ''}</Text>
             </View>
             <View
               style={{
