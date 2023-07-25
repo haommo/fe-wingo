@@ -67,11 +67,18 @@ export default function CreateManifest() {
   });
 
   const watchTotal = watch('list_shipments');
-
   useEffect(() => {
     const total = watchTotal?.length.toString();
     setValue('total_hawb', total);
   }, [setValue, watchTotal]);
+
+  const watchGross = watch('list_shipments');
+  useEffect(() => {
+    const totalGross = watchGross.reduce(function (prev, current) {
+      return prev + +current.gross_weight;
+    }, 0);
+    setValue('total_gross_weight', totalGross);
+  }, [setValue, watchGross]);
 
   const onConfirm = (data) => {
     const payload = new FormData();

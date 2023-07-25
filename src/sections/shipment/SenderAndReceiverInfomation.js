@@ -71,7 +71,11 @@ export function SenderAndReceiverInfomation({
 
   const optionsReason = [
     { value: '', label: 'Select Reason' },
-    { value: 'gift', label: 'GIFT' },
+    { value: 'gift', label: 'Gift' },
+    { value: 'sample', label: 'Sample' },
+    { value: 'commercial', label: 'Commercial' },
+    { value: 'personal', label: 'Personal, Not for Resale' },
+    { value: 'return', label: 'Return for Repair' },
     { value: 'other', label: 'Other' }
   ];
 
