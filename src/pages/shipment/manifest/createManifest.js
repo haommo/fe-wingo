@@ -72,14 +72,6 @@ export default function CreateManifest() {
     setValue('total_hawb', total);
   }, [setValue, watchTotal]);
 
-  const watchGross = watch('list_shipments');
-  useEffect(() => {
-    const totalGross = watchGross.reduce(function (prev, current) {
-      return prev + +current.gross_weight;
-    }, 0);
-    setValue('total_gross_weight', totalGross);
-  }, [setValue, watchGross]);
-
   const onConfirm = (data) => {
     const payload = new FormData();
     payload.append('date', dayjs(data?.date).format('YYYY-MM-DD'));
