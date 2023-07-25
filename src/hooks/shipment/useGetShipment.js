@@ -2,10 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import shipmentApi from 'api/shipmentApi';
 // import { queryKeys } from 'hooks/queryKeys';
 
-const useGetShipment = () => {
+const useGetShipment = (params) => {
   return useQuery({
-    queryKey: ['shipments'],
-    queryFn: async () => await shipmentApi.getAll()
+    queryKey: ['allshipment', params?.page, params?.per_page, params?.['filter-by'], params?.userUuid],
+    queryFn: async () => await shipmentApi.getAll(params),
+
+    keepPreviousData: true,
+    staleTime: Infinity
   });
 };
 

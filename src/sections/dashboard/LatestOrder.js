@@ -83,7 +83,7 @@ export default function LatestOrder() {
               </>
             )}
             {!isLoading &&
-              shipmentList?.slice(0, 4).map((row, index) => (
+              shipmentList?.data?.slice(0, 4).map((row, index) => (
                 <TableRow hover key={index}>
                   <TableCell sx={{ pl: 3 }} align="center">
                     {row?.hawb}

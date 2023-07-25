@@ -72,7 +72,12 @@ export default function AllShipment() {
   const navigation = useNavigate();
   const theme = useTheme();
 
-  const { data: listShipmentSort, isLoading } = useGetShipment();
+  const [params, setParams] = useState({
+    page: 1,
+    per_page: 5
+  });
+
+  const { data: listShipmentSort, isLoading } = useGetShipment(params);
   const { mutate: removeShipment } = useRemoveShipment();
   const { getServiceName } = useServices();
   const [alertPopup, SetAlertPopup] = useState(false);
@@ -229,13 +234,43 @@ export default function AllShipment() {
     [cellService, ActionCell, cellReceiver, cellSender]
   );
 
+  const hanldeFilterChange = (data) => {
+    let newParams = { ...params };
+    if (data.search) {
+      newParams['filter-by'] = data.search;
+      newParams.page = 1;
+    }
+
+    if (data.customer) {
+      newParams['userUuid'] = data.customer.value;
+      newParams.page = 1;
+    }
+
+    if (data.page) {
+      newParams.page = data.page;
+    }
+
+    if (data.limit) {
+      newParams['per_page'] = data.limit;
+    }
+
+    setParams(newParams);
+  };
+
   //   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <>
       <MainCard content={false} boxShadow={true}>
         {
           <ScrollX>
-            <TabaleShipment columns={columns} data={listShipmentSort} isLoading={isLoading} />
+            <TabaleShipment
+              columns={columns}
+              data={listShipmentSort?.data}
+              isLoading={isLoading}
+              params={params}
+              handleFilterChange={hanldeFilterChange}
+              meta={listShipmentSort?.meta}
+            />
           </ScrollX>
         }
       </MainCard>
