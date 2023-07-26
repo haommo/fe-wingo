@@ -137,10 +137,10 @@ export function TabaleShipment({ columns, data, isLoading, params, handleFilterC
           alignItems="center"
           sx={{ p: 3, pb: 3 }}
         >
-          <Stack direction={matchDownSM ? 'column' : 'row'} spacing={1} sx={{ width: '25vw' }}>
-            {isRoleAdmin && <AutoCompleteField control={control} name="customer" placeholder="select customer" options={optionListUser} />}
-            <InputField control={control} name="search" placeholder="search" />
-            <LoadingButton type="submit" variant="contained" sx={{ background: theme.palette.primary, width: '' }}>
+          <Stack direction={matchDownSM ? 'column' : 'row'} spacing={1} sx={{ width: '30vw' }}>
+            {isRoleAdmin && <AutoCompleteField control={control} name="customer" placeholder="Select by customer" options={optionListUser} />}
+            <InputField control={control} name="search" placeholder="Search by hawb number" />
+            <LoadingButton type="submit" variant="contained" sx={{ background: theme.palette.primary, width: '15vw' }}>
               <Stack direction="row" alignItems="center" justifyContent="center" spacing={1}>
                 <Typography>Search</Typography>
               </Stack>
