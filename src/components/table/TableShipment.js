@@ -7,7 +7,7 @@ import { CSVExport, HeaderSort, TablePagination } from 'components/third-party/R
 import { useAuthentication } from 'hooks/useAuthentication';
 import { useGetAllUSer } from 'hooks/user/useGetAllUser';
 import PropTypes from 'prop-types';
-import { Fragment, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useExpanded, useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from 'react-table';
 import { getColorStatus } from 'utils';
@@ -46,6 +46,7 @@ export function TabaleShipment({ columns, data, isLoading, params, handleFilterC
     gotoPage,
     pageCount,
     setPageSize,
+    setFilter,
     state: { pageIndex, pageSize }
   } = useTable(
     {
@@ -79,6 +80,10 @@ export function TabaleShipment({ columns, data, isLoading, params, handleFilterC
   );
 
   const [activeTab, setActiveTab] = useState(groups[0]);
+
+  useEffect(() => {
+    setFilter('status', activeTab === 'All' ? '' : activeTab);
+  }, [activeTab, setFilter]);
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
