@@ -15,7 +15,7 @@ import { useRemoveShipment } from 'hooks/shipment/useDeleteShipment';
 import { truncate } from 'lodash';
 import PropTypes from 'prop-types';
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import { getColorStatus, getCountryDisplayName, getLabelShipment } from 'utils';
 
 // ==============================|| INVOICE - LIST ||============================== //
@@ -69,7 +69,6 @@ SelectionHeader.propTypes = {
 };
 
 export default function AllShipment() {
-  const navigation = useNavigate();
   const theme = useTheme();
 
   const [params, setParams] = useState({
@@ -125,28 +124,29 @@ export default function AllShipment() {
       return (
         <Stack direction="row" alignItems="center" justifyContent="center" spacing={0}>
           <Tooltip title="View">
-            <IconButton
-              color="secondary"
-              onClick={(e) => {
-                e.stopPropagation();
-                // eslint-disable-next-line react/prop-types
-                navigation(`/shipment/viewShipmentDetail/${row?.values?.hawb}`);
-              }}
-            >
-              <EyeTwoTone twoToneColor={theme.palette.secondary.main} />
-            </IconButton>
+            <Link to={`/shipment/viewShipmentDetail/${row?.values?.hawb}`} target="_blank">
+              <IconButton
+                color="secondary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <EyeTwoTone twoToneColor={theme.palette.secondary.main} />
+              </IconButton>
+            </Link>
           </Tooltip>
           <Tooltip title="Edit">
-            <IconButton
-              color="primary"
-              onClick={(e) => {
-                e.stopPropagation();
-                // eslint-disable-next-line react/prop-types
-                navigation(`/shipment/editShipment/${row?.values?.hawb}`);
-              }}
-            >
-              <EditTwoTone twoToneColor={theme.palette.primary.main} />
-            </IconButton>
+            <Link to={`/shipment/editShipment/${row?.values?.hawb}`} target="_blank">
+              <IconButton
+                color="primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // eslint-disable-next-line react/prop-types
+                }}
+              >
+                <EditTwoTone twoToneColor={theme.palette.primary.main} />
+              </IconButton>
+            </Link>
           </Tooltip>
           <Tooltip title="Delete">
             <IconButton
@@ -163,7 +163,7 @@ export default function AllShipment() {
         </Stack>
       );
     },
-    [navigation, theme]
+    [theme]
   );
 
   const columns = useMemo(
@@ -240,9 +240,18 @@ export default function AllShipment() {
       newParams['filter-by'] = data.search;
       newParams.page = 1;
     }
+    if (data.search === '') {
+      delete newParams['filter-by'];
+      newParams.page = 1;
+    }
 
     if (data.customer) {
       newParams['userUuid'] = data.customer.value;
+      newParams.page = 1;
+    }
+
+    if (data.customer === null) {
+      delete newParams['userUuid'];
       newParams.page = 1;
     }
 
