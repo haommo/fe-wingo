@@ -69,15 +69,7 @@ export function TabaleShipment({ columns, data, isLoading, params, handleFilterC
 
   // ================ Tab ================
 
-  const groups = ['All', 'Pending', 'Transit', 'Delivered', 'Cancel'];
-  const countGroup = data.map((item) => item.status);
-  const counts = countGroup.reduce(
-    (acc, value) => ({
-      ...acc,
-      [value]: (acc[value] || 0) + 1
-    }),
-    {}
-  );
+  const groups = ['All'];
 
   const [activeTab, setActiveTab] = useState(groups[0]);
 
@@ -93,23 +85,6 @@ export function TabaleShipment({ columns, data, isLoading, params, handleFilterC
     }
   });
 
-  const countStatus = (status) => {
-    switch (status) {
-      case 'All':
-        return data?.length || 0;
-      case 'Pending':
-        return counts.pending || 0;
-      case 'Transit':
-        return counts['in_transit'] || 0;
-      case 'Delivered':
-        return counts.delivered || 0;
-      case 'Cancel':
-        return counts.cancel || 0;
-      default:
-        return 0;
-    }
-  };
-
   const onSubmit = (data) => {
     handleFilterChange(data);
   };
@@ -123,7 +98,9 @@ export function TabaleShipment({ columns, data, isLoading, params, handleFilterC
               key={index}
               label={status}
               value={status}
-              icon={<Chip label={countStatus(status)} color={getColorStatus(status?.toUpperCase())} variant="light" size="small" />}
+              icon={
+                <Chip label={meta.total ? meta.total : '0'} color={getColorStatus(status?.toUpperCase())} variant="light" size="small" />
+              }
               iconPosition="end"
             />
           ))}
