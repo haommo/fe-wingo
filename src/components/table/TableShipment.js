@@ -1,29 +1,39 @@
-/* eslint-disable no-unused-vars */
+import { Box, Chip, Stack, Tab, Table, TableBody, TableCell, TableHead, TableRow, Tabs, Typography, useMediaQuery } from '@mui/material';
+import { alpha, useTheme } from '@mui/material/styles';
+import LoadingButton from 'components/@extended/LoadingButton';
+import CircularWithPath from 'components/@extended/progress/CircularWithPath';
+import { AutoCompleteField, DateTimeField, InputField } from 'components/formField';
+import { CSVExport, HeaderSort, TablePagination } from 'components/third-party/ReactTable';
+import { useAuthentication } from 'hooks/useAuthentication';
+import { useGetAllUSer } from 'hooks/user/useGetAllUser';
 import PropTypes from 'prop-types';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import { Box, Chip, Stack, Tab, Table, TableBody, TableCell, TableHead, TableRow, Tabs, useMediaQuery } from '@mui/material';
-import { alpha, useTheme } from '@mui/material/styles';
+import { useForm } from 'react-hook-form';
 import { useExpanded, useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from 'react-table';
-import { CSVExport, HeaderSort, TablePagination } from 'components/third-party/ReactTable';
-import { DateTimeField, SearchField } from 'components/formField';
 import { getColorStatus } from 'utils';
 import { renderFilterTypes } from 'utils/react-table';
-import { useForm } from 'react-hook-form';
-import CircularWithPath from 'components/@extended/progress/CircularWithPath';
 
-export function TabaleShipment({ columns, data, isLoading }) {
+export function TabaleShipment({ columns, data, isLoading, params, handleFilterChange, meta }) {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
   // const defaultColumn = useMemo(() => ({ Filter: DateColumnFilter }), []);
+
+  const { isRoleAdmin } = useAuthentication();
+  const { data: listUser } = useGetAllUSer();
+
+  const optionListUser = useMemo(() => {
+    return listUser?.map((user) => ({ value: user?.uuid, label: user?.name }));
+  }, [listUser]);
+
   const filterTypes = useMemo(() => renderFilterTypes, []);
   const initialState = useMemo(
     () => ({
       filters: [{ id: 'status', value: '' }],
       hiddenColumns: ['avatar', 'email'],
-      pageIndex: 0,
-      pageSize: 5
+      pageIndex: params.page - 1,
+      pageSize: params.per_page
     }),
-    []
+    [params]
   );
 
   const {
@@ -34,15 +44,18 @@ export function TabaleShipment({ columns, data, isLoading }) {
     rows,
     page,
     gotoPage,
+    pageCount,
     setPageSize,
-    state: { pageIndex, pageSize },
-    setFilter
+    setFilter,
+    state: { pageIndex, pageSize }
   } = useTable(
     {
       columns,
       data,
       filterTypes,
-      initialState
+      initialState,
+      manualPagination: true,
+      pageCount: Math.ceil(meta?.total / meta?.per_page)
     },
     useGlobalFilter,
     useFilters,
@@ -72,15 +85,11 @@ export function TabaleShipment({ columns, data, isLoading }) {
     setFilter('status', activeTab === 'All' ? '' : activeTab);
   }, [activeTab, setFilter]);
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { isSubmitting, errors }
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       date1: null,
-      date2: null
+      date2: null,
+      search: ''
     }
   });
 
@@ -101,6 +110,10 @@ export function TabaleShipment({ columns, data, isLoading }) {
     }
   };
 
+  const onSubmit = (data) => {
+    handleFilterChange(data);
+  };
+
   return (
     <>
       <Box sx={{ p: 3, pb: 0, width: '100%' }}>
@@ -116,19 +129,33 @@ export function TabaleShipment({ columns, data, isLoading }) {
           ))}
         </Tabs>
       </Box>
-      <Stack direction={matchDownSM ? 'column' : 'row'} spacing={1} justifyContent="space-between" alignItems="center" sx={{ p: 3, pb: 3 }}>
-        <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2}>
-          <SearchField />
-        </Stack>
-        <Stack direction={matchDownSM ? 'column' : 'row'} alignItems="center" spacing={matchDownSM ? 1 : 0}>
-          <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2} mr={2}>
-            <DateTimeField control={control} name="date1" />
-            <DateTimeField control={control} name="date2" />
+      <form noValidate onSubmit={handleSubmit(onSubmit)}>
+        <Stack
+          direction={matchDownSM ? 'column' : 'row'}
+          spacing={1}
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ p: 3, pb: 3 }}
+        >
+          <Stack direction={matchDownSM ? 'column' : 'row'} spacing={1} sx={{ width: '25vw' }}>
+            {isRoleAdmin && <AutoCompleteField control={control} name="customer" placeholder="select customer" options={optionListUser} />}
+            <InputField control={control} name="search" placeholder="search" />
+            <LoadingButton type="submit" variant="contained" sx={{ background: theme.palette.primary, width: '' }}>
+              <Stack direction="row" alignItems="center" justifyContent="center" spacing={1}>
+                <Typography>Search</Typography>
+              </Stack>
+            </LoadingButton>
           </Stack>
-          {/* <CSVExport data={data} filename={'invoice-list.csv'} /> */}
-          <CSVExport />
+          <Stack direction={matchDownSM ? 'column' : 'row'} alignItems="center" spacing={matchDownSM ? 1 : 0}>
+            <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2} mr={2}>
+              <DateTimeField control={control} name="date1" />
+              <DateTimeField control={control} name="date2" />
+            </Stack>
+            <CSVExport />
+          </Stack>
         </Stack>
-      </Stack>
+      </form>
+
       <Box ref={componentRef}>
         <Table {...getTableProps()}>
           <TableHead>
@@ -187,7 +214,15 @@ export function TabaleShipment({ columns, data, isLoading }) {
               })}
             <TableRow sx={{ '&:hover': { bgcolor: 'transparent !important' } }}>
               <TableCell sx={{ p: 2, py: 3 }} colSpan={9}>
-                <TablePagination gotoPage={gotoPage} rows={rows} setPageSize={setPageSize} pageSize={pageSize} pageIndex={pageIndex} />
+                <TablePagination
+                  gotoPage={gotoPage}
+                  rows={rows}
+                  setPageSize={setPageSize}
+                  pageSize={pageSize}
+                  pageIndex={pageIndex}
+                  pageCount={pageCount}
+                  handleFilterChange={handleFilterChange}
+                />
               </TableCell>
             </TableRow>
           </TableBody>
@@ -200,10 +235,14 @@ export function TabaleShipment({ columns, data, isLoading }) {
 TabaleShipment.propTypes = {
   columns: PropTypes.array,
   data: PropTypes.array,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  meta: PropTypes.object,
+  params: PropTypes.object,
+  handleFilterChange: PropTypes.func
 };
 
 TabaleShipment.defaultProps = {
   columns: [],
-  data: []
+  data: [],
+  meta: []
 };

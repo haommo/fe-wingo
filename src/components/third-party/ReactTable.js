@@ -65,7 +65,7 @@ HeaderSort.propTypes = {
 
 // ==============================|| TABLE PAGINATION ||============================== //
 
-export const TablePagination = ({ gotoPage, rows, setPageSize, pageSize, pageIndex }) => {
+export const TablePagination = ({ gotoPage, setPageSize, pageSize, pageIndex, pageCount, handleFilterChange }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
@@ -77,10 +77,12 @@ export const TablePagination = ({ gotoPage, rows, setPageSize, pageSize, pageInd
   };
 
   const handleChangePagination = (event, value) => {
+    handleFilterChange({ page: value });
     gotoPage(value - 1);
   };
 
   const handleChange = (event) => {
+    handleFilterChange({ limit: event.target.value });
     setPageSize(+event.target.value);
   };
 
@@ -131,8 +133,9 @@ export const TablePagination = ({ gotoPage, rows, setPageSize, pageSize, pageInd
       <Grid item sx={{ mt: { xs: 2, sm: 0 } }}>
         <Pagination
           // @ts-ignore
-          count={Math.ceil(rows.length / pageSize)}
+          // count={Math.ceil(rows.length / pageSize)}
           // @ts-ignore
+          count={pageCount}
           page={pageIndex + 1}
           onChange={handleChangePagination}
           color="primary"
@@ -150,7 +153,9 @@ TablePagination.propTypes = {
   setPageSize: PropTypes?.func,
   pageIndex: PropTypes?.number,
   pageSize: PropTypes?.number,
-  rows: PropTypes?.array
+  rows: PropTypes?.array,
+  pageCount: PropTypes?.number,
+  handleFilterChange: PropTypes.func
 };
 
 // ==============================|| SELECTION - PREVIEW ||============================== //

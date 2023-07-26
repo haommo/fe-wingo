@@ -2,7 +2,7 @@ import axiosClient from './axiosClient';
 
 const shipmentApi = {
   getAll(params) {
-    const url = '/shipment';
+    const url = '/allshipment';
     return axiosClient.get(url, { params });
   },
 

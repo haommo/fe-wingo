@@ -15,7 +15,7 @@ import { useRemoveShipment } from 'hooks/shipment/useDeleteShipment';
 import { truncate } from 'lodash';
 import PropTypes from 'prop-types';
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import { getColorStatus, getCountryDisplayName, getLabelShipment } from 'utils';
 
 // ==============================|| INVOICE - LIST ||============================== //
@@ -69,10 +69,14 @@ SelectionHeader.propTypes = {
 };
 
 export default function AllShipment() {
-  const navigation = useNavigate();
   const theme = useTheme();
 
-  const { data: listShipmentSort, isLoading } = useGetShipment();
+  const [params, setParams] = useState({
+    page: 1,
+    per_page: 5
+  });
+
+  const { data: listShipmentSort, isLoading } = useGetShipment(params);
   const { mutate: removeShipment } = useRemoveShipment();
   const { getServiceName } = useServices();
   const [alertPopup, SetAlertPopup] = useState(false);
@@ -120,28 +124,29 @@ export default function AllShipment() {
       return (
         <Stack direction="row" alignItems="center" justifyContent="center" spacing={0}>
           <Tooltip title="View">
-            <IconButton
-              color="secondary"
-              onClick={(e) => {
-                e.stopPropagation();
-                // eslint-disable-next-line react/prop-types
-                navigation(`/shipment/viewShipmentDetail/${row?.values?.hawb}`);
-              }}
-            >
-              <EyeTwoTone twoToneColor={theme.palette.secondary.main} />
-            </IconButton>
+            <Link to={`/shipment/viewShipmentDetail/${row?.values?.hawb}`} target="_blank">
+              <IconButton
+                color="secondary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <EyeTwoTone twoToneColor={theme.palette.secondary.main} />
+              </IconButton>
+            </Link>
           </Tooltip>
           <Tooltip title="Edit">
-            <IconButton
-              color="primary"
-              onClick={(e) => {
-                e.stopPropagation();
-                // eslint-disable-next-line react/prop-types
-                navigation(`/shipment/editShipment/${row?.values?.hawb}`);
-              }}
-            >
-              <EditTwoTone twoToneColor={theme.palette.primary.main} />
-            </IconButton>
+            <Link to={`/shipment/editShipment/${row?.values?.hawb}`} target="_blank">
+              <IconButton
+                color="primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // eslint-disable-next-line react/prop-types
+                }}
+              >
+                <EditTwoTone twoToneColor={theme.palette.primary.main} />
+              </IconButton>
+            </Link>
           </Tooltip>
           <Tooltip title="Delete">
             <IconButton
@@ -158,7 +163,7 @@ export default function AllShipment() {
         </Stack>
       );
     },
-    [navigation, theme]
+    [theme]
   );
 
   const columns = useMemo(
@@ -176,17 +181,6 @@ export default function AllShipment() {
         accessor: 'hawb',
         className: 'cell-center',
         disableFilters: true
-      },
-      {
-        Header: 'status',
-        accessor: 'status',
-        disableFilters: true,
-        Cell: StatusCell
-      },
-      {
-        Header: 'date',
-        accessor: 'created_at',
-        Cell: CustomerCellDate
       },
 
       {
@@ -220,6 +214,18 @@ export default function AllShipment() {
       },
 
       {
+        Header: 'status',
+        accessor: 'status',
+        disableFilters: true,
+        Cell: StatusCell
+      },
+      {
+        Header: 'date',
+        accessor: 'created_at',
+        Cell: CustomerCellDate
+      },
+
+      {
         Header: 'Actions',
         className: 'cell-center',
         disableSortBy: true,
@@ -229,13 +235,52 @@ export default function AllShipment() {
     [cellService, ActionCell, cellReceiver, cellSender]
   );
 
+  const hanldeFilterChange = (data) => {
+    let newParams = { ...params };
+    if (data.search) {
+      newParams['filter-by'] = data.search;
+      newParams.page = 1;
+    }
+    if (data.search === '') {
+      delete newParams['filter-by'];
+      newParams.page = 1;
+    }
+
+    if (data.customer) {
+      newParams['userUuid'] = data.customer.value;
+      newParams.page = 1;
+    }
+
+    if (data.customer === null) {
+      delete newParams['userUuid'];
+      newParams.page = 1;
+    }
+
+    if (data.page) {
+      newParams.page = data.page;
+    }
+
+    if (data.limit) {
+      newParams['per_page'] = data.limit;
+    }
+
+    setParams(newParams);
+  };
+
   //   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <>
       <MainCard content={false} boxShadow={true}>
         {
           <ScrollX>
-            <TabaleShipment columns={columns} data={listShipmentSort} isLoading={isLoading} />
+            <TabaleShipment
+              columns={columns}
+              data={listShipmentSort?.data}
+              isLoading={isLoading}
+              params={params}
+              handleFilterChange={hanldeFilterChange}
+              meta={listShipmentSort?.meta}
+            />
           </ScrollX>
         }
       </MainCard>
