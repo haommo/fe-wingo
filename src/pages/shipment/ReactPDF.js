@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   fontSpc: {
     textAlign: 'center',
-    fontSize: '8px'
+    fontSize: '10px'
   },
   country: {
     display: 'flex',
@@ -371,7 +371,7 @@ export default function ReactPDF(props) {
             <View style={styles.barcode}>
               <Text style={styles.fontSpc}>Service: Wingo Logistics</Text>
               <MyBarcode barcode={props.shipment.hawb ? props.shipment.hawb : '1'} />
-              <Text style={styles.fontSpc}>{props.shipment?.hwab}</Text>
+              <Text style={styles.fontSpc}>{props.shipment?.hawb}</Text>
             </View>
             {/* <QRCodeDocument ids={}/> */}
             <Image src={qrCode} alt="dhl" style={{ width: 50, height: 50, marginRight: 10, marginLeft: 15 }} />
