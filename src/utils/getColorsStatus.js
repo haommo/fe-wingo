@@ -31,17 +31,11 @@ export const getColorStatus = (status) => {
 
 export const getColorStatusManifest = (status) => {
   switch (status) {
-    case '1':
-      return 'secondary';
-    case '2 ':
-      return 'primary';
-    case '3':
+    case 'booking':
       return 'warning';
-    case '4':
-      return 'info';
-    case '5':
-      return 'error';
-    case '6':
+    case 'departed ':
+      return 'primary';
+    case 'arrived':
       return 'success';
     default:
       return 'primary';

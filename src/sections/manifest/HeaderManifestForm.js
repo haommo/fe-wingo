@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 export function HeaderManifestFrom({ control }) {
   const optionsStatus = [
     { value: '', label: 'Select Type' },
-    { value: 'departed', label: 'Departed' }
+    { value: 'booking', label: 'Booking' },
+    { value: 'departed', label: 'Departed' },
+    { value: 'arrived', label: 'Arrived' }
   ];
 
   return (

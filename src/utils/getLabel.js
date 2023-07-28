@@ -15,18 +15,12 @@ export const getLabelShipment = (status) => {
 
 export const getLabelManifest = (status) => {
   switch (status) {
-    case '1':
-      return 'Booked';
-    case '2':
+    case 'booking':
+      return 'Booking';
+    case 'departed ':
       return 'Departed';
-    case '3':
+    case 'arrived':
       return 'Arrived';
-    case '4':
-      return 'Received';
-    case '5':
-      return 'Notified';
-    case '6':
-      return 'Delivered';
     default:
       return '-';
   }
