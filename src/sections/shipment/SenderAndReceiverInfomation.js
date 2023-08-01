@@ -57,7 +57,12 @@ export function SenderAndReceiverInfomation({
     { value: '', label: 'Select LocalCode' },
     { value: 'ups', label: 'UPS' },
     { value: 'dhl', label: 'DHL' },
-    { value: 'fedex', label: 'FEDEX' }
+    { value: 'kerrytj', label: 'Kerry Taiwan' },
+    { value: 'taqbin-jp', label: 'Yamato JP' },
+    { value: 'cj-logistics', label: 'CJ Logistics KR' },
+    { value: 'gd-express', label: 'GDEX Malaysia' },
+    { value: 'sf-international', label: 'SF CHINA' },
+    { value: 'dpd-de', label: 'DPD Germany' }
   ];
 
   const optionStatus = [
