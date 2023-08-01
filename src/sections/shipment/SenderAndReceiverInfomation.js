@@ -58,6 +58,7 @@ export function SenderAndReceiverInfomation({
     { value: 'ups', label: 'UPS' },
     { value: 'dhl', label: 'DHL' },
     { value: 'fedex', label: 'FEDEX' },
+    { value: 'vn-post', label: 'EMS Vietnam' },
     { value: 'kerrytj', label: 'Kerry Taiwan' },
     { value: 'taqbin-jp', label: 'Yamato JP' },
     { value: 'cj-logistics', label: 'CJ Logistics KR' },
