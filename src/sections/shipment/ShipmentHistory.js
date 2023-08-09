@@ -40,7 +40,7 @@ export function ShipmentHistory({
     if (editData && !hasSubmit && formValues?.shipmentHistory?.length === 0) {
       editData?.forEach((item) => {
         append({
-          date: dayjs(item?.created_at),
+          date: dayjs(item?.date),
           status: item?.status,
           detail: item?.detail,
           location: item?.location
