@@ -64,7 +64,9 @@ export function SenderAndReceiverInfomation({
     { value: 'cj-logistics', label: 'CJ Logistics KR' },
     { value: 'gd-express', label: 'GDEX Malaysia' },
     { value: 'sf-international', label: 'SF CHINA' },
-    { value: 'dpd-de', label: 'DPD Germany' }
+    { value: 'dpd-de', label: 'DPD Germany' },
+    { value: 'purolator', label: 'Purolator' },
+    { value: 'au-post', label: 'Australia Post' }
   ];
 
   const optionStatus = [
