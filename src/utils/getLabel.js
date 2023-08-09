@@ -17,7 +17,7 @@ export const getLabelManifest = (status) => {
   switch (status) {
     case 'booking':
       return 'Booking';
-    case 'departed ':
+    case 'departed':
       return 'Departed';
     case 'arrived':
       return 'Arrived';
