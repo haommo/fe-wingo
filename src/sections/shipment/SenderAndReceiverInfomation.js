@@ -67,7 +67,8 @@ export function SenderAndReceiverInfomation({
     { value: 'dpd-de', label: 'DPD Germany' },
     { value: 'purolator', label: 'Purolator' },
     { value: 'au-post', label: 'Australia Post' },
-    { value: 'sagawa-jp', label: 'Sagawa Japan' }
+    { value: 'sagawa-jp', label: 'Sagawa Japan' },
+    { value: 'cdek-ru', label: 'CDEK Russia' }
   ];
 
   const optionStatus = [
