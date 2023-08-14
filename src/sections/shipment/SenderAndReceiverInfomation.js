@@ -66,7 +66,8 @@ export function SenderAndReceiverInfomation({
     { value: 'sf-international', label: 'SF CHINA' },
     { value: 'dpd-de', label: 'DPD Germany' },
     { value: 'purolator', label: 'Purolator' },
-    { value: 'au-post', label: 'Australia Post' }
+    { value: 'au-post', label: 'Australia Post' },
+    { value: 'sagawa-jp', label: 'Sagawa Japan' }
   ];
 
   const optionStatus = [
