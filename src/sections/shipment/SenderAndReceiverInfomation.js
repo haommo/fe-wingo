@@ -68,7 +68,10 @@ export function SenderAndReceiverInfomation({
     { value: 'purolator', label: 'Purolator' },
     { value: 'au-post', label: 'Australia Post' },
     { value: 'sagawa-jp', label: 'Sagawa Japan' },
-    { value: 'cdek-ru', label: 'CDEK Russia' }
+    { value: 'cdek-ru', label: 'CDEK Russia' },
+    { value: 'dtdc', label: 'DTDC India' },
+    { value: 'ca-post', label: 'Canada Post' },
+    { value: 'kerry-express-th', label: 'Kerry Thailan' }
   ];
 
   const optionStatus = [
