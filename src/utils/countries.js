@@ -368,6 +368,7 @@ export const countriesList = [
     phone: '+1-340'
   },
   { code: 'VN', label: 'Vietnam', phone: '+84' },
+  { code: 'KZ', label: 'Kazakhstan', phone: '+7' },
   { code: 'VU', label: 'Vanuatu', phone: '+678' },
   { code: 'WF', label: 'Wallis and Futuna', phone: '+681' },
   { code: 'WS', label: 'Samoa', phone: '+685' },
